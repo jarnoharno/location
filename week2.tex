@@ -144,6 +144,16 @@ PDOP 3.423913
 
 5) \textbf{Positioning implementation}
 
+I implemented a probabilistic fingerprinting algorithm based on normal
+distribution with R. Missing RSS values were replaced with an RSS value of $-120$.
+The program can be found at \url{http://www.cs.helsinki.fi/u/jaleppan/location}.
+\begin{verbatim}
+$ ./prpos.R test_set.csv 
+29 30 47 1 46 36 47 17 46 18
+\end{verbatim}
+The 10 test measurements are estimated to be at grid cells 29, 30, 47, 1, 46,
+36, 47, 17, 36 and 18 in this order.
+
 %\bibliographystyle{plainnat}
 %\bibliography{ref}
 

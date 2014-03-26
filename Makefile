@@ -1,4 +1,4 @@
-week = 1
+WEEK = 1
 build/week$(WEEK).pdf: week$(WEEK).tex
 	latexmk -pdf -outdir=build week1
 
