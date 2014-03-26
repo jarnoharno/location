@@ -1,0 +1,96 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[finnish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{calc}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\setlist[description]{font={\rmfamily}}
+\addtokomafont{disposition}{\rmfamily}
+
+\subject{Location-Awareness: Spring 2014}
+\author{Jarno Leppänen}
+\title{Exercise: 1}
+\date{18.3.2014}
+
+\begin{document}
+
+\maketitle
+
+\begin{enumerate}
+  \item
+    \begin{enumerate}
+      \item
+        \begin{description}[style=nextline]
+          \item[IndoorAtlas]{
+              IndoorAtlas is an indoor mapping and positioning service based in
+              Oulu, Finland. Their rather unique positioning technology is based
+              on mapping magnetic fingerprints inside buildings.
+            }
+          \item[iBeacon]{
+              iBeacon is a Bluetooth Low Energy (BLE) based specification from
+              Apple which can be used for indoor positioning and proximity
+              sensing. BLE beacons have very low power consumption and
+              can operate up to 2 years with a single charge.
+            }
+          \item[ByteLight]{
+              ByteLight is a location tracking system based on LED light pulses
+              detected with a smartphone app.
+            }
+          \item[WiFiSLAM]{
+              WiFiSLAM was a startup that developed sensor fusion technology
+              which combined radio fingerprinting with inertial navigation
+              done with smartphone sensors. They were acquired by Apple in 2013.
+            }
+        \end{description}
+      \item
+        \begin{description}[style=nextline]
+          \item[Tinder]{
+              Tinder is a location based social networking app that connects
+              mutually interested users. Tinder analyzes users' social graph
+              based on their Facebook profiles and matches candidates based
+              on current location, mutual friends and common interests.
+            }
+        \end{description}
+    \end{enumerate}
+
+  \item
+    \begin{enumerate}
+      \item
+        A geodetic datum is a reference from which measurements are made.
+        Horizontal datums are used to describe a point on the Earth's surface
+        in terms of latitude and longitude. Vertical datums are used to measure
+        depths and elevations.
+      \item
+        Planar or azimuthal map projections project the Earth on a plane. They
+        share the property that directions from the projections central point
+        are preserved.
+
+        Conic projections map meridians to equally spaced lines radiating from
+        the apex of the projection and parallels to circular lines centered on
+        the apex. Conic projections are accurate around the two parallels where
+        the surface of the Earth and the cone intersect.
+      \item Inverse flattening $f^{-1}$ is defined in terms of semimajor axis
+        $a$ and semiminor axis $b$ as
+
+        \begin{align}
+          f^{-1} &= \frac{a}{a - b}
+        \end{align}
+
+        Solving $a$ and plugging in given values
+        $b = 6356752.31424518\ \textup{m}$ and
+        $f^{-1} = 298.257223563$ we get
+
+        \begin{align}
+          b &= \frac{b f^{-1}}{f^{-1} - 1} \\
+            &\approx 6378137\ \textup{m}
+        \end{align}
+
+
+\end{enumerate}
+
+
+\end{document}

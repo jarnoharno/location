@@ -1,0 +1,150 @@
+\documentclass[a4paper,parskip=full]{scrartcl}
+\usepackage[finnish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{calc}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{tabularx}
+\usepackage[numbers]{natbib}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\setlist[description]{font={\rmfamily}}
+\addtokomafont{disposition}{\rmfamily}
+\sisetup{per-mode=symbol}
+
+\subject{Location-Awareness: Spring 2014}
+\author{Jarno Leppänen}
+\title{Exercise: 2}
+\date{25.3.2014}
+
+\begin{document}
+
+\maketitle
+
+1) \textbf{Positioning}
+
+a)
+
+\begin{tabularx}{\textwidth}{ | >{\raggedright\arraybackslash}p{14ex} | >{\raggedright\arraybackslash}X | >{\raggedright\arraybackslash}X | }
+  \hline
+  & \textbf{Ultrasound} & \textbf{GSM} \\ \hline
+  \textbf{Location representation} &
+    Relative if positions of receivers/transmitters are not fixed (eg.
+    Relate). Absolute if transmitters/receivers are fixed and their positions in
+    some coordinate system are known (eg. Cricket with known beacon positions).
+    &
+    Absolute \\ \hline
+  \textbf{Scale} & Local, typically indoors & Local, areas with required
+    infrastructure, outdoors \\ \hline
+  \textbf{Location system type} & Can be of any type, depending on the system
+    & Can be of any type, depending on client/infrastructure support \\ \hline
+  \textbf{Measurement} & Ultrasound signal, measurement type can be
+    ID, RSS or time of flight, depending on the system. & Radio signal,
+      base station IDs and RSS-measurements are typically used in
+      client-based systems, time of flight (timing advance) can be used with
+      network-based systems. \\ \hline
+  \textbf{Error sources} & Noise, geometry, clock errors, multipath propagation
+    & Noise, geometry, clock errors, multipath propagation, signal
+      attenuation \\ \hline
+\end{tabularx}
+
+b) The distance traveled is $\SI{3}{m/s} \cdot \SI{18}{h} \cdot \SI{3600}{s/h}
+= \SI{194400}{m}$. Unix program called geod can be used to calculate the
+final position and azimuth.
+\begin{verbatim}
+$ echo "39.0291382dN 125.7421118dE 145.6d $(echo '3 * 18 * 3600' | bc)" |\
+> geod +ellps=WGS84 +units=m
+37d34'53.553"N  126d59'13.128"E -33d37'41.828"
+\end{verbatim}
+The new location is N\ang{37;34;53.553} E\ang{126;59;13.128}.
+
+2) \textbf{RF-based positioning}
+
+a) Quite frankly, the figure in this assignment sucks. I'm assuming that (i) the
+boat and the shore in the figure have changed places, (ii) the line between them
+is orthogonal to the line between the two reference points and that (iii)
+the shore is lying at the intersection of the aforementioned orthogonal lines.
+
+The first assumption does not change the outcome of the calculations
+but makes the setting a bit more realistic. Why would the boat lie exactly
+between the two reference points? Why would we know the distances
+between shore and the two reference points, but not between the boat and
+any other place?
+
+With the assumptions We get $\sin\alpha = \frac{d}{a}$ so the the distance to
+the shore is $d = a\sin\alpha$. Plugging in values we get $d = \SI{100}{m}
+\cdot \sin\ang{60} \approx \SI{86.6}{m}$.
+
+Let the distances between shore
+and reference points A and B e $x$ and $y$ respectively and the distance
+between reference points $z = x + y$. Now $\cos\alpha = \frac{x}{a}$ and
+$\cos\beta = \frac{y}{b}$. Solving $z$ we get $z = a\cos\alpha + b\cos\beta$.
+Plugging in values we get the distance $z = \SI{100}{m} \cdot \cos\ang{60} +
+\SI{150}{m} \cdot \cos\ang{40} \approx \SI{165}{m}$.
+
+b) R was used for the calculations.
+\begin{verbatim}
+> e=c(14.42,13.77,17.55,12.01,17.34,13.64,51.93,51.72,61.51,34.14)
+> quantile(e, c(.5,.95))
+   50%    95%
+   17.445 57.199
+\end{verbatim}
+The median error is 17.445 and 95-percentile error is 57.199.
+
+c) With R again:
+\begin{verbatim}
+> e=c(16.62,12.87,18.35,11.42,17.62,13.04,52.13,50.62,63.01,32.94)
+> quantile(e, c(.5,.95))
+   50%    95%
+   17.985 58.114
+\end{verbatim}
+The median error is 17.985 and 95-percentile error is 58.114.
+
+Assuming that the units in these measurements are comparable (meters?),
+the error distributions are nearly identical. But because the first system
+seems to be just a bit more accurate, it is better for navigation. If some
+inaccuracy is expected from a treasure hunt game, the second might be better
+for that purpose.
+
+3) \textbf{Fingerprint-based positioning}
+
+a) Positions were calculated with R. The program can be found at
+\url{http://www.cs.helsinki.fi/u/jaleppan/location}.
+With all invocations $k = 5$.
+\begin{verbatim}
+$ ./knnpos.R 5 -70 -72
+32.33644 184.2327
+\end{verbatim}
+The estimated position with kNN is approximately 32.3, 184.2.
+
+b)
+\begin{verbatim}
+$ ./knnpos.R 5 -70 -72 TRUE
+36.19177 160.3137
+\end{verbatim}
+The estimated position with WkNN is approximately 36.2, 160.3.
+
+4) \textbf{Dilution of Precision}
+a, b) DoP matrix and values were calculated with R. The program can be found at
+\url{http://www.cs.helsinki.fi/u/jaleppan/location}.
+\begin{verbatim}
+$ ./dop.R
+ 1.6744270 -0.2895913 -1.7609931 -1.5059021
+-0.2895913  0.9235268  0.8591840  0.6345951
+-1.7609931  0.8591840  9.1252271  6.3591522
+-1.5059021  0.6345951  6.3591522  4.7398650
+HDOP 1.611817
+VDOP 3.020799
+PDOP 3.423913
+\end{verbatim}
+
+5) \textbf{Positioning implementation}
+
+%\bibliographystyle{plainnat}
+%\bibliography{ref}
+
+\end{document}
