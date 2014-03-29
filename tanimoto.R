@@ -10,7 +10,8 @@ n = dim(rss)[1]
 rss[rss == 0] = -100
 
 # tanimoto
-tanimoto = function(a, b) (a %*% b) / (a %*% a + b %*% b - a %*% b)
+tanimoto = function(a, b) (a %*% b) /
+  (a %*% a + b %*% b - a %*% b)
 
 # successive rows
 succ = abind(rss[1:(n-1),], rss[2:n,], along = 3)
@@ -19,5 +20,9 @@ succ = abind(rss[1:(n-1),], rss[2:n,], along = 3)
 tsucc = apply(succ, 1, function(x) tanimoto(x[,1], x[,2]))
 
 if (!interactive()) {
-  cat(tsucc, '\n')
+  cat(signif(tsucc, 4), '\n')
+  pdf('tanimoto.pdf')
+  plot(tsucc,type='b',ylab=expression(
+    T(bold(x)[i], bold(x)[i+1])),xlab=expression(i))
+  dev.off()
 }
